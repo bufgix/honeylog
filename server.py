@@ -6,7 +6,6 @@ import logging
 logging.basicConfig(level=logging.DEBUG)
 logfile = pathlib.Path("".join(sys.argv[1:]))
 
-
 class TCPHandler(socketserver.BaseRequestHandler):
     def __init__(self, *args, **kwargs):
         self.logfile = logfile
@@ -25,5 +24,9 @@ if __name__ == '__main__':
         server = socketserver.TCPServer(('localhost', 2112), TCPHandler)
         server.serve_forever()
     except KeyboardInterrupt:
+        server.shutdown()
         logging.error("Server interrupted")
     
+    except Exception as e:
+        server.shutdown()
+        logging.error("{e}. Server closed")
