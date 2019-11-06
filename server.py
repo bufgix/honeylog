@@ -21,7 +21,7 @@ class TCPHandler(socketserver.BaseRequestHandler):
 
 if __name__ == '__main__':
     try:
-        server = socketserver.TCPServer(('localhost', 2112), TCPHandler)
+        server = socketserver.TCPServer(('0.0.0.0', 2112), TCPHandler)
         server.serve_forever()
     except KeyboardInterrupt:
         server.shutdown()
