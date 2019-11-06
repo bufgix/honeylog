@@ -4,7 +4,7 @@ import sys
 import pathlib
 import logging
 
-PACKET_SIZE = 1024 * 10
+PACKET_SIZE = 1024
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -14,12 +14,15 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 try:
     logging.info(f"Connecting {HOST}...")    
     sock.connect((HOST, int(PORT)))
-    received = str(sock.recv(PACKET_SIZE), "utf-8")
-
     now = datetime.now().strftime("%H_%M_%S")
     filename = f"honeylog_{now}.log"
     logfile = pathlib.Path(filename)
-    logfile.write_text(received)
+    with logfile.open(mode="w") as fid:
+        while True:
+            recv = str(sock.recv(PACKET_SIZE), "utf-8")
+            if not recv:
+                break
+            fid.write(recv)
     logging.info(f"Saved log file: {filename}")
 
 finally:
