@@ -15,6 +15,7 @@ parser.add_argument(
 parser.add_argument(
     'gmail', help="Email adress that will receive log file", metavar="GMAIL")
 parser.add_argument('passw', help="Password of your gmail", metavar="PASSWORD")
+parser.add_argument("--interval", default=10, type=int, help="Interval to the sending process")
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -51,7 +52,7 @@ def main():
             server.starttls()
             server.login(args.gmail, args.passw)
             send_email(server, **vars(args))
-            time.sleep(10)
+            time.sleep(args.interval)
         except KeyboardInterrupt:
             server.quit()
             logging.error("Process interrupted!")
